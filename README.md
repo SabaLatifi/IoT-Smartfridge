@@ -7,3 +7,4 @@ Hemsidans uppbyggnad
 Kamera AI/Scanner för kylskåp. 
 * Python
 * API (Flask)
+* RaspberryPi 5 med användning av terminal för kameran.
