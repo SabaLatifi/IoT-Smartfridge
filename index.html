@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Fridge</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            color: white;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            flex-direction: column;
+        }
+
+        .container {
+            display: flex;
+            max-width: 1200px;
+            border-radius: 20px;
+            overflow: hidden;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            animation: fadeIn 1.2s ease-in-out;
+            flex-direction: row;
+            width: 100%;
+        }
+
+        .image-section {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .image-section iframe {
+            width: 100%;
+            height: 500px;
+            /* Adjust the height as needed */
+            border: none;
+            background-color: transparent;
+        }
+
+        .info-section {
+            flex: 1;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: flex-start;
+        }
+
+        /* Text Gradient applied here */
+        .info-section h1 {
+            font-size: 40px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            background: linear-gradient(90deg, #ff8c00, #ff2e63);
+            /* Simple gradient */
+            -webkit-background-clip: text;
+            color: transparent;
+            margin-bottom: 20px;
+        }
+
+        .info-section p,
+        .info-section ul {
+            font-size: 18px;
+            line-height: 1.7;
+            text-align: left;
+        }
+
+        .info-section ul {
+            list-style-type: none;
+            margin-bottom: 20px;
+        }
+
+        .info-section li {
+            position: relative;
+            padding-left: 25px;
+            margin-bottom: 10px;
+        }
+
+        .info-section li::before {
+            content: "✔";
+            position: absolute;
+            left: 0;
+            color: #ff2e63;
+        }
+
+        /* Button Gradient applied here */
+        .btn {
+            background: linear-gradient(90deg, #ff8c00, #ff2e63);
+            /* Simple gradient */
+            color: white;
+            padding: 15px 40px;
+            font-size: 18px;
+            font-weight: bold;
+            border-radius: 50px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 5px 15px rgba(255, 46, 99, 0.5);
+            align-self: flex-start;
+        }
+
+        .btn:hover {
+            background: linear-gradient(90deg, #ff2e63, #ff8c00);
+            /* Simple gradient on hover */
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(255, 46, 99, 0.7);
+        }
+
+        .qr-container {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            margin-top: 40px;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .qr-box-container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .qr-box {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 20px;
+            border-radius: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .qr-code {
+            width: 150px;
+            height: 150px;
+        }
+
+        .qr-text {
+            margin-top: 10px;
+            font-size: 18px;
+            color: white;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        nav {
+            width: 100%;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+        }
+
+        nav ul {
+            display: flex;
+            list-style-type: none;
+        }
+
+        nav ul li {
+            margin-right: 20px;
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-size: 18px;
+            font-weight: bold;
+            transition: color 0.3s;
+        }
+
+        nav ul li a:hover {
+            color: #ff8c00; /* Hover color to match theme */
+        }
+
+        nav .login-btn {
+            background: linear-gradient(90deg, #ff8c00, #ff2e63);
+            color: white;
+            padding: 10px 20px;
+            font-size: 18px;
+            font-weight: bold;
+            border-radius: 50px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 5px 15px rgba(255, 46, 99, 0.5);
+        }
+
+        nav .login-btn:hover {
+            background: linear-gradient(90deg, #ff2e63, #ff8c00);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(255, 46, 99, 0.7);
+        }
+
+        .cart {
+            display: flex;
+            align-items: center;
+            position: relative;
+        }
+
+        .cart-icon {
+            width: 24px;
+            height: 24px;
+            background: url('https://img.icons8.com/ios-filled/50/ffffff/shopping-cart.png') no-repeat center center;
+            background-size: cover;
+        }
+
+        .cart-count {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            background: #ff2e63;
+            color: white;
+            border-radius: 50%;
+            padding: 5px 10px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+
+            .image-section {
+                height: auto;
+                width: 100%;
+            }
+
+            .info-section {
+                align-items: center;
+            }
+
+            .qr-container {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <nav>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="index.html">Features</a></li>
+            <li><a href="index.html">Pricing</a></li>
+            <li><a href="index.html">About</a></li>
+            <li><a href="index.html">Contact</a></li>
+        </ul>
+        <div class="cart">
+            <a href="login.html" class="login-btn">Login</a>
+            <a href="checkout.html"><div class="cart-icon"></div></a>
+            <div class="cart-count" id="cart-count">0</div>
+        </div>
+    </nav>
+    
+    
+
+    <div class="container">
+        <div class="image-section">
+            <!-- Embed Custom 3D Fridge Model -->
+            <iframe title="Refrigerator01" frameborder="0" allowfullscreen mozallowfullscreen="true"
+                webkitallowfullscreen="true" allow="autoplay; fullscreen; xr-spatial-tracking"
+                src="https://sketchfab.com/models/e499c1be250248ee9c8b2ecb46faec7c/embed?autostart=1&background_color=ffffff&transparent=true&ui_theme=dark&ui_controls=0&ui_infos=0&ui_loading=0&ui_stop=0&ui_watermark=0&camera_position=0,0,5"></iframe>
+        </div>
+
+
+
+        <div class="info-section">
+            <h1>Smart Fridge</h1>
+            <p><strong>Price:</strong> $999.99</p>
+            <p><strong>Description:</strong> Elevate your kitchen with the Smart Fridge, featuring AI-powered food
+                tracking, voice commands, weight sensor monitor and smart energy optimization.</p>
+            <ul>
+                <li>AI-Powered Food Inventory</li>
+                <li>Smart Energy Optimization</li>
+                <li>Voice-activated Assistant</li>
+                <li>Touchscreen with Recipe Integration</li>
+                <li>Weight sensors monitor fridge items</li>
+            </ul>
+            <button id="add-to-cart-btn" class="btn">Add to Cart</button>
+        </div>
+    </div>
+
+    <!-- QR code container -->
+    <div class="qr-container">
+        <div class="qr-box-container">
+            <div class="qr-box">
+                <img src="https://i.ibb.co/yF7vQdf3/adobe-express-qr-code-1.png" alt="QR Code" class="qr-code">
+            </div>
+            <div class="qr-box">
+                <img src="https://i.ibb.co/ynJ7fppL/My-PDF.png?quality=lossless" alt="QR Code" class="qr-code">
+            </div>
+        </div>
+        <div class="qr-text">
+            For more information, scan!
+        </div>
+    </div>
+    <script>
+        // Cart object to store added items
+        const cart = [];
+    
+        // Function to add item to the cart
+        function addToCart(item) {
+            cart.push(item);
+            alert('Item added to cart!');
+            updateCartDisplay();
+        }
+    
+        // Function to update cart display
+        function updateCartDisplay() {
+            const cartCount = cart.length;
+            const cartDisplay = document.getElementById('cart-count');
+            if (cartDisplay) {
+                cartDisplay.textContent = cartCount;
+            }
+        }
+    
+        // Event listener for "Add to Cart" button
+        document.getElementById('add-to-cart-btn').addEventListener('click', function () {
+            const item = {
+                name: 'Smart Fridge',
+                price: 999.99
+            };
+            addToCart(item);
+        });
+    </script>
+    
+    
+</body>
+
+</html>
